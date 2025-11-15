@@ -1,0 +1,53 @@
+package Com.Test;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Tc_02 {
+
+    WebDriver driver;
+    String url = "https://edubank.example.com"; 
+
+    @Before
+    public void setUp() {
+     
+        System.setProperty("webdriver.chrome.driver", "/usr/local/bin/chromedriver");
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get(url);
+        System.out.println("Application opened in Google Chrome");
+    }
+
+    @Test
+    public void testLoginAndAssertCustomerName() throws InterruptedException {
+        
+        driver.findElement(By.id("username")).sendKeys("your_username"); 
+        driver.findElement(By.id("password")).sendKeys("your_password"); 
+        driver.findElement(By.id("loginButton")).click(); 
+        
+        Thread.sleep(2000);
+        String currentUrl = driver.getCurrentUrl();
+        System.out.println(" Current Page URL after login: " + currentUrl);
+
+        String pageSource = driver.getPageSource();
+        Assert.assertTrue(" 'Steve Martin' not found on page!", pageSource.contains("Steve Martin"));
+        System.out.println("Assert passed — 'Steve Martin' is present on the page");
+
+       
+        driver.findElement(By.id("logoutButton")).click(); // replace with actual logout locator
+        System.out.println(" Logout successful");
+    }
+
+    @After
+    public void tearDown() {
+    	driver.close();
+        driver.quit();
+        System.out.println(" Browser closed successfully");
+    }
+}
+
